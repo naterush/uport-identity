@@ -32,7 +32,7 @@ contract MetaTxRelay {
    * @param claimedSender Address of the user who is having tx forwarded
    */
   function relayMetaTx(uint8 sigV, bytes32 sigR, bytes32 sigS, bytes data, address claimedSender) payable {
-    bytes32 h = sha3(this, nonce[claimedSender], data, msg.sender, validUntil);
+    bytes32 h = sha3(this, nonce[claimedSender], data, msg.sender);
     nonce[claimedSender]++;
     address addressFromSig = ecrecover(h, sigV, sigR, sigS);
 
