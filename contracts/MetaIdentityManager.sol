@@ -49,6 +49,7 @@ contract MetaIdentityManager {
   mapping(address => mapping(address => uint)) limiter;
   mapping(address => uint) public migrationInitiated;
   mapping(address => address) public migrationNewAddress;
+  mapping(address => bytes32) public DDO;
 
   modifier onlyAuthorized() {
     if (msg.sender == relay || checkMessageData(msg.sender)) _;
@@ -197,6 +198,10 @@ contract MetaIdentityManager {
       identity.transfer(newIdManager);
       MigrationFinalized(identity, newIdManager, sender);
     }
+  }
+
+  function changeDDO(address sender, Proxy identity, bytes32 newDDO) onlyAuthorized onlyOlderOwner(identity, sender) {
+    DDO[identity] = newDDO;
   }
 
   //Checks that address a is the first input in msg.data.
