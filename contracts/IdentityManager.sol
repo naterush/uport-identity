@@ -47,6 +47,7 @@ contract IdentityManager {
   mapping(address => mapping(address => uint)) limiter;
   mapping(address => uint) public migrationInitiated;
   mapping(address => address) public migrationNewAddress;
+  mapping(address => bytes32) public DDO;
 
   modifier onlyOwner(address identity) {
     if (isOwner(identity, msg.sender)) _ ;
@@ -172,6 +173,10 @@ contract IdentityManager {
       identity.transfer(newIdManager);
       MigrationFinalized(identity, newIdManager, msg.sender);
     }
+  }
+
+  function changeDDO(Proxy identity, bytes32 newDDO) onlyOlderOwner(identity) {
+    DDO[identity] = newDDO;
   }
 
   function isOwner(address identity, address owner) constant returns (bool) {
